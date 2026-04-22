@@ -102,17 +102,17 @@ export default function Dashboard() {
               disabled={loading}
               className="w-full bg-indigo-600 hover:bg-slate-900 text-white font-bold py-3 rounded-md transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <span>Generate Plan</span>
-                  <Rocket className="w-4 h-4" />
-                </>
-              )}
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    তৈরি হচ্ছে...
+                  </>
+                ) : (
+                  <>
+                    <span>Generate Plan</span>
+                    <Rocket className="w-4 h-4" />
+                  </>
+                )}
             </button>
           </form>
         </div>
@@ -141,7 +141,7 @@ export default function Dashboard() {
                 <div className="w-20 h-20 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin" />
                 <Sparkles className="w-8 h-8 text-indigo-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h4 className="text-xl font-display font-bold text-slate-900 mb-2">Generating Your Strategy</h4>
+              <h4 className="text-xl font-display font-bold text-slate-900 mb-2">AI marketing plan তৈরি হচ্ছে...</h4>
               <p className="text-slate-500 text-sm max-w-xs text-center">
                 Reviewing local consumer trends and building your high-converting funnel...
               </p>
@@ -164,8 +164,8 @@ export default function Dashboard() {
             </motion.div>
           ) : error ? (
             <div className="p-12 bg-red-50 rounded-xl border border-red-100 text-center">
-              <p className="text-red-600 font-medium">{error}</p>
-              <button onClick={handleGenerate} className="mt-4 text-sm font-bold text-red-700 underline underline-offset-4">Try Again</button>
+              <p className="text-red-600 font-medium whitespace-pre-wrap">কিছু সমস্যা হয়েছে, আবার চেষ্টা করুন</p>
+              <button onClick={handleGenerate} className="mt-4 text-sm font-bold text-red-700 underline underline-offset-4">আবার চেষ্টা করুন</button>
             </div>
           ) : (
             <div className="h-full min-h-[500px] flex flex-col items-center justify-center bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm">
