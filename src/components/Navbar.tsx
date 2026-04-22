@@ -2,11 +2,14 @@ import { LogOut, LayoutDashboard, Rocket } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useAuth } from '../hooks/useAuth';
+import { cn } from '../lib/utils';
 
 export default function Navbar() {
   const { user } = useAuth();
   
   const handleLogout = () => signOut(auth);
+
+  const isPro = user?.email === 'hossainsolyman534@gmail.com' || user?.email === 'hmsolyman33@gmail.com';
 
   return (
     <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 flex-shrink-0 z-10">
@@ -27,7 +30,12 @@ export default function Navbar() {
       {user && (
         <div className="flex items-center gap-4">
           <div className="text-right hidden sm:block">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">PRO PLAN</p>
+            <p className={cn(
+              "text-[10px] font-bold uppercase tracking-wider leading-none mb-1",
+              isPro ? "text-indigo-600" : "text-slate-400"
+            )}>
+              {isPro ? 'APPROVED PRO' : 'FREE PLAN'}
+            </p>
             <p className="text-sm font-semibold">{user.email?.split('@')[0]}</p>
           </div>
           <button

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Copy, Check, Search, Map, MessageSquare, Type, Gift, User, Brain, AlertTriangle, BadgeDollarSign, Swords, TrendingUp } from 'lucide-react';
 import { MarketingPlanResult } from '../services/gemini';
 import { motion } from 'motion/react';

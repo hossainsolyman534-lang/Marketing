@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { db } from '../lib/firebase';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
@@ -6,6 +6,7 @@ import { generateMarketingPlan, MarketingPlanResult } from '../services/gemini';
 import { Sparkles, ShoppingBag, Target, DollarSign, Flag, Loader2, ArrowRight, History, Rocket, Crown, AlertOctagon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import PlanDisplay from './PlanDisplay';
+import { cn } from '../lib/utils';
 
 const FREE_LIMIT = 3;
 
@@ -71,7 +72,8 @@ export default function Dashboard() {
     }
   };
 
-  const isLimitReached = usageCount >= FREE_LIMIT;
+  const isPro = user?.email === 'hossainsolyman534@gmail.com' || user?.email === 'hmsolyman33@gmail.com';
+  const isLimitReached = usageCount >= FREE_LIMIT && !isPro;
 
   return (
     <div className="flex flex-1 overflow-hidden w-full">
@@ -161,8 +163,8 @@ export default function Dashboard() {
         
         <div className="mt-auto p-4 bg-slate-50 rounded-xl border border-slate-200">
           <div className="flex justify-between items-end mb-2">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Usage Limit</p>
-            <p className="text-xs font-bold leading-none">{usageCount} / {FREE_LIMIT}</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{isPro ? 'Usage (Pro)' : 'Usage Limit'}</p>
+            <p className="text-xs font-bold leading-none">{usageCount} / {isPro ? '∞' : FREE_LIMIT}</p>
           </div>
           <div className="w-full bg-slate-200 h-1.5 rounded-full">
             <div 
@@ -170,10 +172,10 @@ export default function Dashboard() {
                 "h-1.5 rounded-full transition-all duration-500",
                 isLimitReached ? "bg-red-500" : "bg-indigo-500"
               )}
-              style={{ width: `${Math.min((usageCount / FREE_LIMIT) * 100, 100)}%` }}
+              style={{ width: `${isPro ? (usageCount / 10) * 100 : Math.min((usageCount / FREE_LIMIT) * 100, 100)}%` }}
             ></div>
           </div>
-          <p className="text-[10px] text-slate-400 mt-2">Free strategy limit resets monthly.</p>
+          <p className="text-[10px] text-slate-400 mt-2">{isPro ? 'Unlimited pro access active.' : 'Free strategy limit resets monthly.'}</p>
         </div>
       </aside>
 
