@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128;
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) 
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.keys().hasAll(['email', 'uid', 'createdAt'])
+        && request.resource.data.keys().size() == 3;
+      allow update: if isOwner(userId)
+        && request.resource.data.email == existing().email
+        && request.resource.data.uid == existing().uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email']); // Simple example, usually email doesn't change
+    }
+
+    // Marketing Plans
+    match /plans/{planId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() 
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.productName is string
+        && request.resource.data.productName.size() <= 200
+        && request.resource.data.keys().hasAll(['userId', 'productName', 'targetAudience', 'price', 'goal', 'market_research', 'funnel', 'copies', 'headlines', 'offer', 'createdAt'])
+        && request.resource.data.keys().size() == 11;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+  }
+}
